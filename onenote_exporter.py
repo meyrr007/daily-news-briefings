@@ -178,3 +178,25 @@ def publish_to_onenote_com(html_filepath: str) -> bool:
     except Exception as e:
         print(f"[i] Note on direct OneNote application sync: {e}")
         return False
+
+def clean_old_briefings(output_dir: str, max_age_days: int = 7):
+    """
+    Deletes briefing folders under briefings/ that are older than max_age_days.
+    """
+    briefings_root = os.path.join(output_dir, "briefings")
+    if not os.path.exists(briefings_root):
+        return
+
+    cutoff_date = datetime.date.today() - datetime.timedelta(days=max_age_days)
+    
+    for folder_name in os.listdir(briefings_root):
+        folder_path = os.path.join(briefings_root, folder_name)
+        if os.path.isdir(folder_path):
+            try:
+                folder_date = datetime.datetime.strptime(folder_name, "%Y-%m-%d").date()
+                if folder_date < cutoff_date:
+                    import shutil
+                    shutil.rmtree(folder_path)
+                    print(f"[+] Cleaned up old briefing folder: {folder_name} (older than {max_age_days} days)")
+            except ValueError:
+                pass

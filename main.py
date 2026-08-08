@@ -2,11 +2,11 @@ import argparse
 import os
 import sys
 
-from config import DEFAULT_TOPICS, MAX_NEWS_ITEMS, MAX_YOUTUBE_ITEMS, YOUTUBE_CHANNELS, YOUTUBE_MAX_AGE_DAYS, OUTPUT_DIR
+from config import DEFAULT_TOPICS, MAX_NEWS_ITEMS, MAX_YOUTUBE_ITEMS, YOUTUBE_CHANNELS, YOUTUBE_MAX_AGE_DAYS, MAX_BRIEFING_AGE_DAYS, OUTPUT_DIR
 from news_fetcher import fetch_google_news
 from youtube_fetcher import search_youtube_videos, fetch_channel_recent_videos
 from summarizer import summarize_news, summarize_youtube
-from onenote_exporter import generate_onenote_html, export_to_file, publish_to_onenote_com
+from onenote_exporter import generate_onenote_html, export_to_file, publish_to_onenote_com, clean_old_briefings
 from index_generator import update_index_dashboard
 from git_publisher import publish_to_github
 
@@ -67,6 +67,10 @@ if __name__ == "__main__":
         print(f"[*] Running briefing for all established topics: {DEFAULT_TOPICS}")
         for t in DEFAULT_TOPICS:
             run_briefing(t)
+
+    # Clean up old briefing folders older than MAX_BRIEFING_AGE_DAYS (7 days)
+    print(f"\n[+] Pruning briefing archives older than {MAX_BRIEFING_AGE_DAYS} days...")
+    clean_old_briefings(OUTPUT_DIR, max_age_days=MAX_BRIEFING_AGE_DAYS)
 
     # Update web dashboard index.html & publish to GitHub Pages
     print("\n[5/5] Updating Web Dashboard index.html...")

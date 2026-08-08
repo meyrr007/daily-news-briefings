@@ -9,7 +9,6 @@ DEFAULT_TOPICS = [
     "data science",
     "machine learning",
     "deep learning",
-
 ]
 
 # Max news items to fetch per topic
@@ -27,6 +26,9 @@ YOUTUBE_CHANNELS = [
 
 # How many days back to look for new YouTube videos (e.g. 3 = last 3 days)
 YOUTUBE_MAX_AGE_DAYS = 3
+
+# Maximum age of local & web briefing folders to keep (e.g. 7 days). Older folders will be deleted automatically.
+MAX_BRIEFING_AGE_DAYS = 7
 
 # Directory to save generated HTML briefing files
 OUTPUT_DIR = os.path.dirname(os.path.abspath(__file__))
